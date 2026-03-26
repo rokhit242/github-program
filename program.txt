@@ -1,0 +1,53 @@
+public class StepperMotorSimulation {
+
+    // Define the step sequence for a 4-coil stepper motor (e.g., 28BYJ-48)
+    private static final int[][] STEP_SEQUENCE = {
+        {1, 0, 0, 1}, // Step 1
+        {1, 0, 0, 0}, // Step 2
+        {1, 1, 0, 0}, // Step 3
+        {0, 1, 0, 0}, // Step 4
+        {0, 1, 1, 0}, // Step 5
+        {0, 0, 1, 0}, // Step 6
+        {0, 0, 1, 1}, // Step 7
+        {0, 0, 0, 1}  // Step 8
+    };
+
+    // Simulate energizing coils
+    private static void energizeCoils(int[] step) {
+        System.out.println("Coils: A=" + step[0] + " B=" + step[1] +
+                           " C=" + step[2] + " D=" + step[3]);
+    }
+
+    // Rotate motor forward
+    public static void rotateForward(int steps, int delayMs) throws InterruptedException {
+        System.out.println("Rotating forward...");
+        for (int i = 0; i < steps; i++) {
+            int[] currentStep = STEP_SEQUENCE[i % STEP_SEQUENCE.length];
+            energizeCoils(currentStep);
+            Thread.sleep(delayMs);
+        }
+    }
+
+    // Rotate motor backward
+    public static void rotateBackward(int steps, int delayMs) throws InterruptedException {
+        System.out.println("Rotating backward...");
+        for (int i = steps - 1; i >= 0; i--) {
+            int[] currentStep = STEP_SEQUENCE[i % STEP_SEQUENCE.length];
+            energizeCoils(currentStep);
+            Thread.sleep(delayMs);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Example: rotate forward 16 steps with 200ms delay
+            rotateForward(16, 200);
+
+            // Example: rotate backward 16 steps with 200ms delay
+            rotateBackward(16, 200);
+
+        } catch (InterruptedException e) {
+            System.out.println("Motor simulation interrupted.");
+        }
+    }
+}
